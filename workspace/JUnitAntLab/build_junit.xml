@@ -1,0 +1,96 @@
+<project default="main">
+    <property name="src.dir"            value="src"/>
+    <property name="build.dir"          value="build"/>
+    <property name="classes.dir"        value="${build.dir}/classes"/>
+    <property name="jar.dir"            value="${build.dir}/jar"/>
+    <property name="main-class"         value="ca.bcit.cst.Program"/>
+    <property name="ant.project.name"   value="build/jar/WorldTrustService"/>
+    <property name="lib.dir"            value="lib"/>
+    <property name="docs.dir"           value="docs" />
+    <property name="report.dir"         value="testreport" />
+
+    <path id="classpath">
+        <fileset dir="${lib.dir}" includes="**/*.jar"/>
+    </path>
+    
+    <path id="application" location="${jar.dir}/${ant.project.name}.jar"/>
+    
+    <target name="clean" description="deletes directories that later get created">
+        <delete dir="${build.dir}"/>
+        <delete dir="${docs.dir}" />
+        <delete dir="${report.dir}" />
+    </target>
+
+    <target name="compile" description="compiles source code">
+        <mkdir dir="${classes.dir}"/>
+        <javac srcdir="${src.dir}" destdir="${classes.dir}" includeantruntime="false" 
+          classpathref="classpath" />
+        <copy todir="${classes.dir}">
+          <fileset dir="${src.dir}" excludes="**/*.java"/>
+        </copy>
+    </target>
+
+    <!-- Creates Javadoc --> 
+    <target name="docs" depends="compile" description="produces javadoc"> 
+      <mkdir dir="${docs.dir}" />
+      <javadoc packagenames="src" sourcepath="${src.dir}" destdir="${docs.dir}"> 
+        <classpath>
+          <path refid="classpath"/>
+          <path refid="application"/>
+        </classpath>
+        <!-- Define which files / directory should get included, we include all --> 
+        <fileset dir="${src.dir}"> 
+          <include name="**" /> 
+        </fileset>
+      </javadoc> 
+    </target>
+
+    <target name="jar" depends="compile" description="puts all class files into a distributable jar file">
+        <mkdir dir="${jar.dir}"/>
+        <jar destfile="${jar.dir}/${ant.project.name}.jar" basedir="${classes.dir}">
+            <manifest>
+                <attribute name="Main-Class" value="${main-class}"/>
+            </manifest>
+        </jar>
+    </target>
+
+    <target name="run" depends="jar" description="executes application by calling class with main() method">
+        <java fork="true" classname="${main-class}">
+          <classpath>
+            <path refid="classpath"/>
+            <path refid="application"/>
+          </classpath>
+        </java>
+    </target>
+	
+    <target name="clean-build" depends="clean, compile, jar"
+      description="deletes unnecessary directories, compiles source code, and generates JAR file" />
+    
+    <target name="junit" depends="jar" description="runs junit tests">
+      <mkdir dir="${report.dir}"/>
+      <junit printsummary="yes" fork="true" haltonfailure="yes">
+        <classpath>
+          <path refid="classpath"/>
+          <path refid="application"/>
+        </classpath>
+        
+        <formatter type="xml"/>
+
+        <batchtest fork="yes" todir="${report.dir}">
+          <fileset dir="${src.dir}" includes="**/*Tests.java"/>
+          <fileset dir="${src.dir}" includes="**/*Suite.java"/>
+        </batchtest>
+      </junit>
+    </target>        
+
+    <target name="main" depends="clean, compile, jar, run"
+      description="deletes unnecessary directories, compiles source code, generates JAR file, runs class with main() method"/>
+
+    <target name="junitreport" description="generates junit reports">
+      <junitreport todir="${report.dir}">
+        <fileset dir="${report.dir}" includes="TEST-*.xml"/>
+        <report todir="${report.dir}"/>
+      </junitreport>
+    </target>
+
+</project>

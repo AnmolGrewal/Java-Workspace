@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Copy package &apos;ca.bcit.cst.tests&apos; to &apos;JUnitAntLab/src&apos;&#x0D;&#x0A;- Original project: &apos;WorldTrustServiceTests&apos;&#x0D;&#x0A;- Destination element: &apos;JUnitAntLab/src&apos;&#x0D;&#x0A;- Original element: &apos;WorldTrustServiceTests/src/ca.bcit.cst.tests&apos;" description="Copy package" destination="=JUnitAntLab/src" element1="/src&lt;ca.bcit.cst.tests" flags="589830" fragments="1" id="org.eclipse.jdt.ui.copy" policy="org.eclipse.jdt.ui.copyPackages" stamp="1416268285485" version="1.0"/>
+</session>

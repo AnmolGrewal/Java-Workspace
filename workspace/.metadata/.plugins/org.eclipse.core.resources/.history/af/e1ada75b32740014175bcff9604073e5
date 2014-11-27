@@ -1,0 +1,12 @@
+package Lab11;
+
+public class Average {
+
+    /**
+     * @param args
+     */
+    public static void main(String[] args) {
+
+    }
+
+}
